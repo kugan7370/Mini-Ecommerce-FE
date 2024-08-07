@@ -2,14 +2,16 @@ import React from "react";
 import Header from "../components/Header";
 import MainTitle from "../components/MainTitle";
 
-function Product() {
+function Favourite() {
   return (
     <div>
       <Header />
-      <MainTitle title="Products" />
+      <div className="px-[102px]">
+        <MainTitle title="PRODUCTS" />
+      </div>
 
       {/* search section */}
-      <div className="flex  items-center justify-between gap-2 px-[59px] w-full">
+      <div className="flex  items-center justify-between gap-2 px-[59px] py-[33px] w-full">
         <div className="flex gap-2 py-2 px-4 w-3/5 bg-secondary-F7 rounded-full">
           <input
             type="text"
@@ -138,4 +140,4 @@ function Product() {
   );
 }
 
-export default Product;
+export default Favourite;
