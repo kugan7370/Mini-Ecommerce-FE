@@ -14,7 +14,6 @@ function Product() {
     const fetchProducts = async () => {
       try {
         const products = await getProducts();
-        console.log("Products:", products);
         setProducts(products);
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -22,6 +21,12 @@ function Product() {
     };
     fetchProducts();
   }, []);
+
+  const handleProductDelete = (productId) => {
+    setProducts((prevProducts) =>
+      prevProducts.filter((product) => product._id !== productId)
+    );
+  };
 
   return (
     <div>
@@ -31,7 +36,7 @@ function Product() {
       <SearchHeader />
 
       {/* table section */}
-      {products && <TableData products={products} />}
+      <TableData products={products} onProductDelete={handleProductDelete} />
     </div>
   );
 }

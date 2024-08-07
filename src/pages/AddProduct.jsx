@@ -57,7 +57,7 @@ function AddProducts() {
       <div className="px-[161px] flex-col space-y-[56px]">
         {/* SKU */}
         <div className="w-full flex justify-between items-center">
-          <div className="flex gap-[30px]">
+          <div className="flex  gap-[44px]">
             <label
               htmlFor="sku"
               className="text-secondary-16 text-[19px] font-Satoshi-Medium"
@@ -74,7 +74,7 @@ function AddProducts() {
           </div>
 
           {/* Price */}
-          <div className="flex gap-[44px]">
+          <div className="flex  gap-[44px]">
             <label
               htmlFor="price"
               className="text-secondary-16 text-[19px] font-Satoshi-Medium"
@@ -93,7 +93,7 @@ function AddProducts() {
 
         {/* product name and quantity */}
         <div className="w-full flex justify-between items-center">
-          <div className="flex gap-[30px]">
+          <div className="flex  gap-[30px] ">
             <label
               htmlFor="product-name"
               className="text-secondary-16 text-[19px] font-Satoshi-Medium"
@@ -108,7 +108,7 @@ function AddProducts() {
               className="border-none outline-none w-[400px] bg-secondary-F7 rounded-md p-2"
             />
           </div>
-          <div className="flex gap-[44px]">
+          <div className="flex  gap-[44px]">
             <label
               htmlFor="quantity"
               className="text-secondary-16 text-[19px] font-Satoshi-Medium"

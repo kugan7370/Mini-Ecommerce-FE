@@ -1,13 +1,56 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import Modal from "./Modal";
+import { deleteProduct } from "../api/Product";
+import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { addFavourite, removeFavourite } from "../features/FavouriteSlicer";
 
-function TableData({ products }) {
-  const handleDelete = (productId) => {
-    console.log("Deleting product with id:", productId);
+function TableData({ products, onProductDelete }) {
+  const [showModal, setShowModal] = useState(false);
+  const [productToDelete, setProductToDelete] = useState(null);
+  const favourites = useSelector((state) => state.favourite.favourite);
+  const dispatch = useDispatch();
+
+  const handleDeleteClick = (productId) => {
+    setProductToDelete(productId);
+    setShowModal(true);
   };
+
+  const handleConfirmDelete = async () => {
+    console.log("Deleting product with id:", productToDelete);
+
+    try {
+      await deleteProduct(productToDelete);
+      toast.success("Product deleted successfully!");
+      onProductDelete(productToDelete); // Inform the parent component about the deletion
+    } catch (error) {
+      toast.error("Error deleting product");
+      console.error("Error deleting product:", error);
+    }
+
+    // Close the modal
+    setShowModal(false);
+    setProductToDelete(null);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setProductToDelete(null);
+  };
+
+  const toggleFavourite = (product) => {
+    console.log("Toggling favourite for favourites:", favourites);
+    if (favourites.find((item) => item._id === product._id)) {
+      dispatch(removeFavourite(product));
+    } else {
+      dispatch(addFavourite(product));
+    }
+  };
+
   return (
     <div className="px-[144px] py-[33px] w-full">
-      {products.length > 0 && (
+      {products.length > 0 ? (
         <table className="w-full">
           <thead>
             <tr>
@@ -52,8 +95,8 @@ function TableData({ products }) {
                   <img
                     src="./images/delete-icon.svg"
                     alt="delete"
-                    className="w-6 h-6 object-contain"
-                    onClick={() => handleDelete(product._id)}
+                    className="w-6 h-6 object-contain cursor-pointer"
+                    onClick={() => handleDeleteClick(product._id)}
                   />
                   <Link to={`/editProduct/${product._id}`}>
                     <img
@@ -63,16 +106,28 @@ function TableData({ products }) {
                     />
                   </Link>
                   <img
-                    src="./images/starred.svg"
+                    src={
+                      favourites.find((item) => item._id === product._id)
+                        ? "./images/starred.svg"
+                        : "./images/star.svg"
+                    }
                     alt="star"
-                    className="w-6 h-6 object-contain"
+                    className="w-6 h-6 object-contain cursor-pointer"
+                    onClick={() => toggleFavourite(product)}
                   />
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+      ) : (
+        <p>No products available</p>
       )}
+      <Modal
+        show={showModal}
+        onClose={handleCloseModal}
+        onConfirm={handleConfirmDelete}
+      />
     </div>
   );
 }

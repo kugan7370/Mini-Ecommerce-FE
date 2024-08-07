@@ -55,9 +55,9 @@ const updateProduct = async (productId, product) => {
 
 const deleteProduct = async (productId) => {
   try {
-    const url = `/api/product/${productId}`;
+    const url = `/product/${productId}`;
     const method = "DELETE";
-    const deletedProduct = await privateRequest(url, method);
+    const deletedProduct = await publicRequest(url, method);
     return deletedProduct;
   } catch (error) {
     console.error("Error deleting product:", error);
