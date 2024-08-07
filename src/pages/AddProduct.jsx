@@ -1,8 +1,51 @@
-import React from "react";
+import React, { useState } from "react";
 import Header from "../components/Header";
 import MainTitle from "../components/MainTitle";
-
+import { addProduct } from "../api/Product"; // Import your API function
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 function AddProducts() {
+  const [sku, setSku] = useState("");
+  const [productName, setProductName] = useState("");
+  const [quantity, setQuantity] = useState("");
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState("");
+  const [images, setImages] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const navigator = useNavigate();
+
+  const handleImageChange = (e) => {
+    setImages(Array.from(e.target.files));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    const formData = new FormData();
+    formData.append("SKU", sku);
+    formData.append("productName", productName);
+    formData.append("quantity", quantity);
+    formData.append("description", description);
+    formData.append("price", price);
+
+    images.forEach((image) => {
+      formData.append("images", image);
+    });
+
+    try {
+      const response = await addProduct(formData);
+      toast.success("Product added successfully!");
+      navigator("/");
+    } catch (error) {
+      toast.error("Error adding product");
+      console.error("Error adding product:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="mb-20">
       <Header />
@@ -11,25 +54,46 @@ function AddProducts() {
       </div>
 
       {/* add products */}
-      <div className="px-[161px]   flex-col space-y-[56px]">
+      <div className="px-[161px] flex-col space-y-[56px]">
         {/* SKU */}
-        <div className="w-full flex gap-[44px]">
-          <label
-            htmlFor="sku"
-            className="text-secondary-16 text-[19px] font-Satoshi-Medium"
-          >
-            SKU
-          </label>
-          <input
-            type="text"
-            id="sku"
-            className="border-none outline-none w-[400px] bg-secondary-F7 rounded-md p-2"
-          />
+        <div className="w-full flex justify-between items-center">
+          <div className="flex gap-[30px]">
+            <label
+              htmlFor="sku"
+              className="text-secondary-16 text-[19px] font-Satoshi-Medium"
+            >
+              SKU
+            </label>
+            <input
+              type="text"
+              id="sku"
+              value={sku}
+              onChange={(e) => setSku(e.target.value)}
+              className="border-none outline-none w-[400px] bg-secondary-F7 rounded-md p-2"
+            />
+          </div>
+
+          {/* Price */}
+          <div className="flex gap-[44px]">
+            <label
+              htmlFor="price"
+              className="text-secondary-16 text-[19px] font-Satoshi-Medium"
+            >
+              Price
+            </label>
+            <input
+              type="text"
+              id="price"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+              className="border-none outline-none w-[400px] bg-secondary-F7 rounded-md p-2"
+            />
+          </div>
         </div>
 
         {/* product name and quantity */}
         <div className="w-full flex justify-between items-center">
-          <div className="flex  gap-[30px]">
+          <div className="flex gap-[30px]">
             <label
               htmlFor="product-name"
               className="text-secondary-16 text-[19px] font-Satoshi-Medium"
@@ -39,10 +103,12 @@ function AddProducts() {
             <input
               type="text"
               id="product-name"
+              value={productName}
+              onChange={(e) => setProductName(e.target.value)}
               className="border-none outline-none w-[400px] bg-secondary-F7 rounded-md p-2"
             />
           </div>
-          <div className="flex  gap-[44px]">
+          <div className="flex gap-[44px]">
             <label
               htmlFor="quantity"
               className="text-secondary-16 text-[19px] font-Satoshi-Medium"
@@ -52,13 +118,15 @@ function AddProducts() {
             <input
               type="text"
               id="quantity"
+              value={quantity}
+              onChange={(e) => setQuantity(e.target.value)}
               className="border-none outline-none w-[400px] bg-secondary-F7 rounded-md p-2"
             />
           </div>
         </div>
 
         {/* product description */}
-        <div className=" w-full flex flex-col space-y-[10px]">
+        <div className="w-full flex flex-col space-y-[10px]">
           <label
             htmlFor="description"
             className="text-secondary-16 text-[19px] font-Satoshi-Medium"
@@ -72,6 +140,8 @@ function AddProducts() {
           <textarea
             name="description"
             id="description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
             className="border-none outline-none w-full h-[89px] bg-secondary-F7 rounded-md p-2"
           ></textarea>
         </div>
@@ -89,27 +159,26 @@ function AddProducts() {
           </label>
           {/* image display */}
           <div className="flex gap-[10px]">
-            <img
-              src="./images/product-img-1.png"
-              alt="product"
-              className="w-[85px] h-[85px] object-contain rounded-[10px]"
-            />
-            <img
-              src="./images/product-img-2.png"
-              alt="product"
-              className="w-[85px] h-[85px] object-contain rounded-[10px]"
-            />
-            <img
-              src="./images/product-img-3.png"
-              alt="product"
-              className="w-[85px] h-[85px] object-contain rounded-[10px]"
-            />
+            {images.map((image, index) => (
+              <img
+                key={index}
+                src={URL.createObjectURL(image)}
+                alt="product"
+                className="w-[85px] h-[85px] object-contain rounded-[10px]"
+              />
+            ))}
           </div>
           <div>
-            <input type="file" id="image" className="hidden" />
+            <input
+              type="file"
+              id="image"
+              multiple
+              onChange={handleImageChange}
+              className="hidden"
+            />
             <label
               htmlFor="image"
-              className="border-b-[1px] border-b-primary outline-none text-primary font-sans   cursor-pointer text-center inline-block"
+              className="border-b-[1px] border-b-primary outline-none text-primary font-sans cursor-pointer text-center inline-block"
             >
               Add Images
             </label>
@@ -118,8 +187,12 @@ function AddProducts() {
 
         {/* add product button */}
         <div className="flex justify-end">
-          <button className="bg-primary text-white w-[249px] py-[15px] px-[45px] h-[56px]  rounded-md font-Satoshi-Bold">
-            Add Product
+          <button
+            onClick={handleSubmit}
+            className="bg-primary text-white w-[249px] py-[15px] px-[45px] h-[56px] rounded-md font-Satoshi-Bold"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Adding..." : "Add Product"}
           </button>
         </div>
       </div>

@@ -1,8 +1,75 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import Header from "../components/Header";
 import MainTitle from "../components/MainTitle";
+import { getProduct, updateProduct } from "../api/Product";
 
 function EditProducts() {
+  const { productId } = useParams();
+  const navigate = useNavigate();
+
+  const [sku, setSku] = useState("");
+  const [productName, setProductName] = useState("");
+  const [quantity, setQuantity] = useState("");
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState("");
+  const [images, setImages] = useState([]);
+  const [newImages, setNewImages] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const product = await getProduct(productId);
+        setSku(product.SKU);
+        setProductName(product.productName);
+        setQuantity(product.quantity);
+        setDescription(product.description);
+        setPrice(product.price);
+        setImages(product.images);
+      } catch (error) {
+        toast.error("Error fetching product data");
+        console.error("Error fetching product:", error);
+      }
+    };
+
+    fetchProduct();
+  }, [productId]);
+
+  const handleImageChange = (e) => {
+    const files = Array.from(e.target.files);
+    setNewImages(files);
+    setImages([]);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    const formData = new FormData();
+    formData.append("SKU", sku);
+    formData.append("productName", productName);
+    formData.append("quantity", quantity);
+    formData.append("description", description);
+    formData.append("price", price);
+
+    newImages.forEach((image) => {
+      formData.append("images", image);
+    });
+
+    try {
+      await updateProduct(productId, formData);
+      toast.success("Product updated successfully!");
+      navigate("/");
+    } catch (error) {
+      toast.error("Error updating product");
+      console.error("Error updating product:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="mb-20">
       <Header />
@@ -10,26 +77,47 @@ function EditProducts() {
         <MainTitle title="PRODUCTS" isEditProduct={true} />
       </div>
 
-      {/* add products */}
-      <div className="px-[161px]   flex-col space-y-[56px]">
-        {/* SKU */}
-        <div className="w-full flex gap-[44px]">
-          <label
-            htmlFor="sku"
-            className="text-secondary-16 text-[19px] font-Satoshi-Medium"
-          >
-            SKU
-          </label>
-          <input
-            type="text"
-            id="sku"
-            className="border-none outline-none w-[400px] bg-secondary-F7 rounded-md p-2"
-          />
+      {/* edit products */}
+      <div className="px-[161px] flex-col space-y-[56px]">
+        <div className="w-full flex justify-between items-center">
+          {/* SKU */}
+          <div className="flex gap-[30px]">
+            <label
+              htmlFor="sku"
+              className="text-secondary-16 text-[19px] font-Satoshi-Medium"
+            >
+              SKU
+            </label>
+            <input
+              type="text"
+              id="sku"
+              value={sku}
+              onChange={(e) => setSku(e.target.value)}
+              className="border-none outline-none w-[400px] bg-secondary-F7 rounded-md p-2"
+            />
+          </div>
+
+          {/* price */}
+          <div className="flex gap-[44px]">
+            <label
+              htmlFor="price"
+              className="text-secondary-16 text-[19px] font-Satoshi-Medium"
+            >
+              Price
+            </label>
+            <input
+              type="text"
+              id="price"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+              className="border-none outline-none w-[400px] bg-secondary-F7 rounded-md p-2"
+            />
+          </div>
         </div>
 
         {/* product name and quantity */}
         <div className="w-full flex justify-between items-center">
-          <div className="flex  gap-[30px]">
+          <div className="flex gap-[30px]">
             <label
               htmlFor="product-name"
               className="text-secondary-16 text-[19px] font-Satoshi-Medium"
@@ -39,10 +127,12 @@ function EditProducts() {
             <input
               type="text"
               id="product-name"
+              value={productName}
+              onChange={(e) => setProductName(e.target.value)}
               className="border-none outline-none w-[400px] bg-secondary-F7 rounded-md p-2"
             />
           </div>
-          <div className="flex  gap-[44px]">
+          <div className="flex gap-[44px]">
             <label
               htmlFor="quantity"
               className="text-secondary-16 text-[19px] font-Satoshi-Medium"
@@ -52,13 +142,15 @@ function EditProducts() {
             <input
               type="text"
               id="quantity"
+              value={quantity}
+              onChange={(e) => setQuantity(e.target.value)}
               className="border-none outline-none w-[400px] bg-secondary-F7 rounded-md p-2"
             />
           </div>
         </div>
 
         {/* product description */}
-        <div className=" w-full flex flex-col space-y-[10px]">
+        <div className="w-full flex flex-col space-y-[10px]">
           <label
             htmlFor="description"
             className="text-secondary-16 text-[19px] font-Satoshi-Medium"
@@ -72,6 +164,8 @@ function EditProducts() {
           <textarea
             name="description"
             id="description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
             className="border-none outline-none w-full h-[89px] bg-secondary-F7 rounded-md p-2"
           ></textarea>
         </div>
@@ -89,37 +183,49 @@ function EditProducts() {
           </label>
           {/* image display */}
           <div className="flex gap-[10px]">
-            <img
-              src="./images/product-img-1.png"
-              alt="product"
-              className="w-[85px] h-[85px] object-contain rounded-[10px]"
-            />
-            <img
-              src="./images/product-img-2.png"
-              alt="product"
-              className="w-[85px] h-[85px] object-contain rounded-[10px]"
-            />
-            <img
-              src="./images/product-img-3.png"
-              alt="product"
-              className="w-[85px] h-[85px] object-contain rounded-[10px]"
-            />
+            {newImages.length > 0
+              ? newImages.map((image, index) => (
+                  <img
+                    key={index}
+                    src={URL.createObjectURL(image)}
+                    alt="product"
+                    className="w-[85px] h-[85px] object-contain rounded-[10px]"
+                  />
+                ))
+              : images.map((image, index) => (
+                  <img
+                    key={index}
+                    src={image.url}
+                    alt="product"
+                    className="w-[85px] h-[85px] object-contain rounded-[10px]"
+                  />
+                ))}
           </div>
           <div>
-            <input type="file" id="image" className="hidden" />
+            <input
+              type="file"
+              id="image"
+              multiple
+              onChange={handleImageChange}
+              className="hidden"
+            />
             <label
               htmlFor="image"
-              className="border-b-[1px] border-b-primary outline-none text-primary font-sans   cursor-pointer text-center inline-block"
+              className="border-b-[1px] border-b-primary outline-none text-primary font-sans cursor-pointer text-center inline-block"
             >
               Add Images
             </label>
           </div>
         </div>
 
-        {/* add product button */}
+        {/* update product button */}
         <div className="flex justify-end">
-          <button className="bg-primary text-white w-[249px] py-[15px] px-[45px] h-[56px]  rounded-md font-Satoshi-Bold">
-            Add Product
+          <button
+            onClick={handleSubmit}
+            className="bg-primary text-white w-[249px] py-[15px] px-[45px] h-[56px] rounded-md font-Satoshi-Bold"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Updating..." : "Update Product"}
           </button>
         </div>
       </div>
