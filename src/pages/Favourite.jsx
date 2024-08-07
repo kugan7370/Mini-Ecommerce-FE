@@ -6,9 +6,7 @@ function Favourite() {
   return (
     <div>
       <Header />
-      <div className="px-[102px]">
-        <MainTitle title="PRODUCTS" />
-      </div>
+      <MainTitle title="FAVOURITE PRODUCTS" />
 
       {/* search section */}
       <div className="flex  items-center justify-between gap-2 px-[59px] py-[33px] w-full">
@@ -43,7 +41,7 @@ function Favourite() {
       </div>
 
       {/* table section */}
-      <div className="px-[59px] py-[33px] w-full ">
+      <div className="px-[144px]  py-[33px] w-full ">
         <table className="w-full ">
           <thead className="">
             <tr className="">

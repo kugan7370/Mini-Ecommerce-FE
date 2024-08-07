@@ -1,8 +1,11 @@
 import React from "react";
 import Header from "../components/Header";
 import MainTitle from "../components/MainTitle";
-
+import { useSearchParams } from "react-router-dom";
 function Search() {
+  const [searchParams] = useSearchParams();
+  const query = searchParams.get("query");
+  console.log("Query:", query);
   return (
     <div>
       <Header />
@@ -41,10 +44,11 @@ function Search() {
       </div>
 
       {/* search list */}
+
       {/* search count */}
       <div className="px-[59px] py-[33px] w-full">
         <p className="text-secondary-16 opacity-50 text-[24px] font-Satoshi-Bold">
-          4 results found for ‘Books’
+          {`4 results found for ‘${query}’`}
         </p>
       </div>
 

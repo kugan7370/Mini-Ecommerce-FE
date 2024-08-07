@@ -1,9 +1,9 @@
 import React from "react";
 
-function MainTitle({ title, isAddProduct }) {
+function MainTitle({ title, isAddProduct, isEditProduct }) {
   return (
     <div className="flex gap-[15px] items-center px-[59px] mt-[41px] mb-[32px]">
-      <h1 className="font-bold text-[36px] tracking-wide font-Satoshi-Bold uppercase">
+      <h1 className="font-extrabold text-[36px] tracking-wide font-Satoshi-Bold uppercase">
         {title}
       </h1>
       {/* arrow image */}
@@ -16,6 +16,18 @@ function MainTitle({ title, isAddProduct }) {
           />
           <h1 className="text-[24px] text-primary tracking-wide font-Satoshi-Bold ">
             Add new product
+          </h1>
+        </>
+      )}
+      {isEditProduct && (
+        <>
+          <img
+            src="./images/arrow.svg"
+            alt="arrow"
+            className="w-[32px] h-[32px] object-cover"
+          />
+          <h1 className="text-[24px] text-primary tracking-wide font-Satoshi-Bold ">
+            Edit product
           </h1>
         </>
       )}

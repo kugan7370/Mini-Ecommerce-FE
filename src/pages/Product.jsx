@@ -1,8 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import Header from "../components/Header";
 import MainTitle from "../components/MainTitle";
-
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 function Product() {
+  const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
+  const handleSearch = () => {
+    console.log("Searching for:", searchQuery);
+    navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
+  };
   return (
     <div>
       <Header />
@@ -14,9 +21,13 @@ function Product() {
           <input
             type="text"
             placeholder="Search for products"
+            onChange={(e) => setSearchQuery(e.target.value)}
             className="border-none outline-none  rounded-md  flex-1 p-2 bg-secondary-F7"
           />
-          <button className="bg-primary text-white gap-2  py-2 px-4 w-[180px] rounded-3xl font-Satoshi-Bold flex items-center justify-center">
+          <button
+            className="bg-primary text-white gap-2  py-2 px-4 w-[180px] rounded-3xl font-Satoshi-Bold flex items-center justify-center"
+            onClick={handleSearch}
+          >
             <img
               src="./images/search.png"
               alt="search"
@@ -26,7 +37,10 @@ function Product() {
           </button>
         </div>
         <div className="flex items-center  gap-4">
-          <button className="bg-primary text-white  py-2 px-4 h-[56px] w-[180px] rounded-md font-Satoshi-Bold">
+          <button
+            className="bg-primary text-white  py-2 px-4 h-[56px] w-[180px] rounded-md font-Satoshi-Bold"
+            onClick={() => navigate("/addProduct")}
+          >
             Add Product
           </button>
 
@@ -41,7 +55,7 @@ function Product() {
       </div>
 
       {/* table section */}
-      <div className="px-[59px] py-[33px] w-full ">
+      <div className="px-[144px] py-[33px] w-full ">
         <table className="w-full ">
           <thead className="">
             <tr className="">
@@ -84,11 +98,13 @@ function Product() {
                   alt="edit"
                   className="w-6 h-6 object-contain"
                 />
-                <img
-                  src="./images/edit-icon.svg"
-                  alt="delete"
-                  className="w-6 h-6 object-contain"
-                />
+                <Link to="/editProduct">
+                  <img
+                    src="./images/edit-icon.svg"
+                    alt="delete"
+                    className="w-6 h-6 object-contain"
+                  />
+                </Link>
                 <img
                   src="./images/starred.svg"
                   alt="delete"
@@ -119,11 +135,13 @@ function Product() {
                   alt="edit"
                   className="w-6 h-6 object-contain"
                 />
-                <img
-                  src="./images/edit-icon.svg"
-                  alt="delete"
-                  className="w-6 h-6 object-contain"
-                />
+                <Link to="/editProduct">
+                  <img
+                    src="./images/edit-icon.svg"
+                    alt="delete"
+                    className="w-6 h-6 object-contain"
+                  />
+                </Link>
                 <img
                   src="./images/starred.svg"
                   alt="delete"
