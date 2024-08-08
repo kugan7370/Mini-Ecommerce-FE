@@ -70,7 +70,7 @@ function SignUp() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="outline-none border-[1px] mb-2 w-full p-2"
-            type="text"
+            type="password"
           />
 
           <p className="mb-4 font-Satoshi-Medium">Confirm Password</p>
@@ -78,7 +78,7 @@ function SignUp() {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             className="outline-none border-[1px] mb-2 w-full p-2"
-            type="text"
+            type="password"
           />
 
           <button
