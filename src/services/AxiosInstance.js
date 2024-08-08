@@ -1,6 +1,8 @@
 import axios from "axios";
+import { getToken } from "./helper";
 
 const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
+console.log("BASE_URL", BASE_URL);
 
 const publicInstance = axios.create({
   baseURL: BASE_URL,
@@ -38,6 +40,19 @@ const otherInstance = axios.create({
     return data;
   },
 });
+
+otherInstance.interceptors.request.use(
+  async (config) => {
+    const token = await getToken();
+    if (token) {
+      config.headers["Authorization"] = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 const publicRequest = async (url, method, data) => {
   try {
@@ -79,10 +94,6 @@ const otherRequest = async (url, method, data) => {
     console.error("Other request error:", error);
     throw error;
   }
-};
-
-const getToken = async () => {
-  return "your-token";
 };
 
 export { publicRequest, privateRequest, otherRequest };

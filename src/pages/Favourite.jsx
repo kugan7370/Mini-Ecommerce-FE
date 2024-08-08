@@ -8,9 +8,7 @@ import TableData from "../components/TableData";
 function Favourite() {
   const favourites = useSelector((state) => state.favourite.favourite);
 
-  const handleProductDelete = (productId) => {
-    // Handle the product deletion for the favourites list if needed
-  };
+  const handleProductDelete = (productId) => {};
 
   return (
     <div>

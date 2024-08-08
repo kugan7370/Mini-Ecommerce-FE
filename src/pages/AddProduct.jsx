@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../components/Header";
 import MainTitle from "../components/MainTitle";
 import { addProduct } from "../api/Product"; // Import your API function
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+
 function AddProducts() {
   const [sku, setSku] = useState("");
   const [productName, setProductName] = useState("");
@@ -12,11 +13,28 @@ function AddProducts() {
   const [price, setPrice] = useState("");
   const [images, setImages] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isFormValid, setIsFormValid] = useState(false);
 
   const navigator = useNavigate();
 
+  useEffect(() => {
+    checkFormValidity();
+  }, [sku, productName, quantity, description, price, images]);
+
   const handleImageChange = (e) => {
     setImages(Array.from(e.target.files));
+  };
+
+  const checkFormValidity = () => {
+    const isValid =
+      sku.trim() !== "" &&
+      productName.trim() !== "" &&
+      quantity.trim() !== "" &&
+      description.trim() !== "" &&
+      price.trim() !== "" &&
+      !isNaN(price) &&
+      images.length > 0;
+    setIsFormValid(isValid);
   };
 
   const handleSubmit = async (e) => {
@@ -57,7 +75,7 @@ function AddProducts() {
       <div className="px-[161px] flex-col space-y-[56px]">
         {/* SKU */}
         <div className="w-full flex justify-between items-center">
-          <div className="flex  gap-[44px]">
+          <div className="flex gap-[44px]">
             <label
               htmlFor="sku"
               className="text-secondary-16 text-[19px] font-Satoshi-Medium"
@@ -74,7 +92,7 @@ function AddProducts() {
           </div>
 
           {/* Price */}
-          <div className="flex  gap-[44px]">
+          <div className="flex gap-[44px]">
             <label
               htmlFor="price"
               className="text-secondary-16 text-[19px] font-Satoshi-Medium"
@@ -93,7 +111,7 @@ function AddProducts() {
 
         {/* product name and quantity */}
         <div className="w-full flex justify-between items-center">
-          <div className="flex  gap-[30px] ">
+          <div className="flex gap-[30px]">
             <label
               htmlFor="product-name"
               className="text-secondary-16 text-[19px] font-Satoshi-Medium"
@@ -108,7 +126,7 @@ function AddProducts() {
               className="border-none outline-none w-[400px] bg-secondary-F7 rounded-md p-2"
             />
           </div>
-          <div className="flex  gap-[44px]">
+          <div className="flex gap-[44px]">
             <label
               htmlFor="quantity"
               className="text-secondary-16 text-[19px] font-Satoshi-Medium"
@@ -190,7 +208,7 @@ function AddProducts() {
           <button
             onClick={handleSubmit}
             className="bg-primary text-white w-[249px] py-[15px] px-[45px] h-[56px] rounded-md font-Satoshi-Bold"
-            disabled={isSubmitting}
+            disabled={isSubmitting || !isFormValid}
           >
             {isSubmitting ? "Adding..." : "Add Product"}
           </button>

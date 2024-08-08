@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Modal from "./Modal";
 import { deleteProduct } from "../api/Product";
 import { toast } from "react-toastify";
@@ -10,7 +10,9 @@ function TableData({ products, onProductDelete }) {
   const [showModal, setShowModal] = useState(false);
   const [productToDelete, setProductToDelete] = useState(null);
   const favourites = useSelector((state) => state.favourite.favourite);
+  const isAuthenticated = useSelector((state) => state.user.token);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleDeleteClick = (productId) => {
     setProductToDelete(productId);
@@ -18,6 +20,12 @@ function TableData({ products, onProductDelete }) {
   };
 
   const handleConfirmDelete = async () => {
+    if (!isAuthenticated) {
+      toast.error("Please sign in to delete a product.");
+      navigate("/signin");
+      return;
+    }
+
     console.log("Deleting product with id:", productToDelete);
 
     try {
