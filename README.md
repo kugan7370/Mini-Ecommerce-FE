@@ -1,70 +1,123 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Mini eCommerce Vendor Portal
 
-## Available Scripts
+Mini eCommerce web application developed using the MERN stack (MongoDB, Express.js, React.js, and Node.js). It serves as a vendor portal allowing vendors to manage products, view favorites, and search for products. 
 
-In the project directory, you can run:
 
-### `npm start`
+## Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Product Management
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+    Add, edit, or delete products.
 
-### `npm test`
+    Upload multiple images for a single product.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+    Select a main image to feature as the thumbnail.
 
-### `npm run build`
+User Management
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+    Login 
+    
+    Register
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Product Browsing
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+    Browse existing products
 
-### `npm run eject`
+    Search functionality with suggestions based on user input.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+    Redirect to search results page based on queries.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Favorites Section
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+    Feature products as favorites using star/check box/radio/button options.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+    Save favorites to local storage and sync with the database.
 
-## Learn More
+Pages
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+    Main Page: Includes search bar and list of all products.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+    Add Product Page: Form to add new products.
 
-### Code Splitting
+    Edit Product Page: Form to edit existing products.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+    Favorite Products Page: Lists favorited products.
 
-### Analyzing the Bundle Size
+    Search Results Page: Shows results based on search queries.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
 
-### Making a Progressive Web App
+Popups
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+    Delete Confirmation Popup: To confirm product deletions.
 
-### Advanced Configuration
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## Tech Stack
 
-### Deployment
+Backend
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+    Node.js
+    Express.js
+    MongoDB (using MongoDB Atlas for cloud storage)
 
-### `npm run build` fails to minify
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Frontend
+
+    React.js
+    Redux for state management
+    Axios for API requests
+    Tailwind
+
+
+## 🔗 Links
+
+Front End
+
+    https://github.com/kugan7370/Mini-Ecommerce-FE
+
+Back End    
+
+    https://github.com/kugan7370/Mini-Ecommerce-BE
+
+
+
+
+    
+## Environment Variables
+
+Front End
+
+    EXPO_PUBLIC_BASE_URL
+
+Back End
+
+    PORT
+
+    Mongo_Connect
+
+    JWT_SECRET
+
+    JWT_EXPIRES_IN
+
+    CLOUD_NAME
+
+    API_KEY
+
+    API_SECRET
+
+
+## Run Locally
+
+Front End
+
+    npm start
+
+Back End
+
+    npm start
+
+
+
+
+
+
